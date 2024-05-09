@@ -29,45 +29,52 @@ const Context = createContext();
 
 const MKPagination = forwardRef(
   ({ item, variant, color, size, active, children, placement, ...rest }, ref) => {
-    const context = item ? useContext(Context) : null;
-    const paginationSize = context ? context.size : null;
-    const paginationProps = useMemo(() => ({ variant, color, size }), []);
-    let placementValue = "flex-end";
+   
+    const context = useContext(Context);
 
+    // Only use context.size if 'item' is true and context is not null
+    const paginationSize = item && context ? context.size : null;
+
+    // Memoize properties that are passed into the Context.Provider
+    const paginationProps = useMemo(() => ({ variant, color, size }), [variant, color, size]);
+
+    // Determine placement value based on 'placement' prop
+    let placementValue = "flex-end";
     if (placement === "left") {
       placementValue = "flex-start";
     } else if (placement === "center") {
       placementValue = "center";
     }
 
-    return (
-      <Context.Provider value={paginationProps}>
-        {item ? (
-          <MKPaginationItemRoot
-            {...rest}
-            ref={ref}
-            variant={active ? context.variant : "outlined"}
-            color={active ? context.color : "secondary"}
-            iconOnly
-            circular
-            ownerState={{ variant, active, paginationSize }}
-          >
-            {children}
-          </MKPaginationItemRoot>
-        ) : (
-          <MKBox
-            display="flex"
-            justifyContent={placementValue}
-            alignItems="center"
-            sx={{ listStyle: "none" }}
-          >
-            {children}
-          </MKBox>
-        )}
-      </Context.Provider>
-    );
-  }
+return (
+  <Context.Provider value={paginationProps}>
+    {item ? (
+      <MKPaginationItemRoot
+        {...rest}
+        ref={ref}
+        variant={active ? context.variant : "outlined"}
+        color={active ? context.color : "secondary"}
+        iconOnly
+        circular
+        ownerState={{ variant, active, paginationSize }}
+      >
+        {children}
+      </MKPaginationItemRoot>
+    ) : (
+      <MKBox
+        display="flex"
+        justifyContent={placementValue}
+        alignItems="center"
+        sx={{ listStyle: "none" }}
+      >
+        {children}
+      </MKBox>
+    )}
+  </Context.Provider>
+  );
+ }
 );
+
 
 // Setting default values for the props of MKPagination
 MKPagination.defaultProps = {
