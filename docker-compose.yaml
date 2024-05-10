@@ -2,8 +2,8 @@ version: "3.9"
 
 services:
   webapplication:
-    image: vprofomis/omislabs:latest
-    container_name: omislabs-website
+    image: vprofomis/omislabs-react-app:latest
+    container_name: omislabs-react
     build:
       context: .
       dockerfile: Dockerfile
@@ -12,17 +12,17 @@ services:
     networks:
       - omislabs_network
 
-  website:
-    build:
-      context: ./ubuntu-apache
-      dockerfile: Dockerfile
-    ports:
-      - "8081:8080"
+  # website:
+  #   build:
+  #     context: ./ubuntu-apache
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "8081:8080"
 
-    volumes:
-      - ./nginx.conf:/usr/local/etc/nginx/conf.d/default.conf
-    networks:
-      - omislabs_network
+  #   volumes:
+  #     - ./nginx.conf:/usr/local/etc/nginx/conf.d/default.conf
+  #   networks:
+  #     - omislabs_network
 
 networks:
   omislabs_network:

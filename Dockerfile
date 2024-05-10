@@ -29,4 +29,8 @@ COPY --from=build /app/build /var/www/html
 
 # Expose port 8080 and define the command to start Nginx
 EXPOSE 8080
+EXPOSE 3000
+EXPOSE 3000/tcp
 CMD ["nginx", "-g", "daemon off;"]
+
+
